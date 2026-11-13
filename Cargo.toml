@@ -9,7 +9,7 @@ description = "Anycast catchment prober: maps which PoP each vantage point lands
 readme = "README.md"
 keywords = ["anycast", "bgp", "ripe-atlas", "dns", "network"]
 categories = ["command-line-utilities", "network-programming"]
-rust-version = "1.85"
+rust-version = "1.88"
 
 [dependencies]
 anyhow = "1"

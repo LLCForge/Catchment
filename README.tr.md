@@ -110,7 +110,7 @@ Chart, 9184 portunda `/healthz` ve `/readyz` yoklar, alarm kuyruğunu ve turlar�
 
 **Kaynaktan**
 
-Gereksinimler: Rust 1.85+ ([rustup.rs](https://rustup.rs)). Sistem kütüphanesi gerekmez (TLS için rustls kullanılır).
+Gereksinimler: Rust 1.88+ ([rustup.rs](https://rustup.rs)). Sistem kütüphanesi gerekmez (TLS için rustls kullanılır).
 
 ```bash
 git clone https://github.com/LLCForge/Catchment.git

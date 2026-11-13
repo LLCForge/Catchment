@@ -110,7 +110,7 @@ The chart probes `/healthz` and `/readyz` on port 9184, keeps the alert queue an
 
 **From source**
 
-Requirements: Rust 1.85+ ([rustup.rs](https://rustup.rs)). No system libraries are needed (TLS is rustls).
+Requirements: Rust 1.88+ ([rustup.rs](https://rustup.rs)). No system libraries are needed (TLS is rustls).
 
 ```bash
 git clone https://github.com/LLCForge/Catchment.git
