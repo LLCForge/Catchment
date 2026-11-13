@@ -31,7 +31,7 @@ socket2 = { version = "0.6", features = ["all"] }
 thiserror = "2"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "time", "signal", "io-util", "sync"] }
 tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12", "logging"] }
-toml = "0.8"
+toml = "1.2"
 tracing = "0.1"
 url = "2"
 
