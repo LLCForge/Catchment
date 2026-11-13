@@ -16,7 +16,7 @@ anyhow = "1"
 axum = { version = "0.8", default-features = false, features = ["http1", "json", "tokio", "query"] }
 base64 = "0.22"
 clap = { version = "4", features = ["derive"] }
-getrandom = "0.3"
+getrandom = "0.4"
 humantime = "2"
 ipnet = { version = "2", features = ["serde"] }
 llcforge-beacon = { path = "crates/llcforge-beacon", version = "0.1" }
