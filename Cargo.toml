@@ -36,7 +36,7 @@ tracing = "0.1"
 url = "2"
 
 [dev-dependencies]
-rcgen = "0.13"
+rcgen = "0.14"
 tower = { version = "0.5", features = ["util"] }
 
 [package.metadata.deb]
