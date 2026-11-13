@@ -1,0 +1,23 @@
+# Example: docker compose up -d
+# Put secrets (bot tokens, routing keys, ...) in ./catchment.env (KEY=value lines,
+# never committed) and reference them from the TOML via *_env settings.
+services:
+  catchment:
+    image: ghcr.io/llcforge/catchment:latest
+    # build: .
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    env_file:
+      - path: ./catchment.env
+        required: false
+    volumes:
+      - ./catchment.toml:/etc/catchment/catchment.toml:ro
+      - catchment-data:/data
+    ports:
+      # Metrics + /healthz + /readyz. Bind to loopback; expose deliberately.
+      - "127.0.0.1:9184:9184"
+
+volumes:
+  catchment-data:

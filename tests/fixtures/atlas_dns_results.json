@@ -1,0 +1,30 @@
+[
+  {
+    "fw": 5080, "lts": 12, "msm_id": 2000001, "prb_id": 1001, "timestamp": 1767225600,
+    "type": "dns", "af": 4, "dst_addr": "192.0.2.53", "from": "203.0.113.10", "proto": "UDP",
+    "result": {
+      "ANCOUNT": 1, "ARCOUNT": 0, "ID": 1234, "NSCOUNT": 0, "QDCOUNT": 1, "rt": 12.5, "size": 49,
+      "abuf": "BNKEAAABAAEAAAAACGhvc3RuYW1lBGJpbmQAABAAA8AMABAAAwAAAAAADQxmcmExLmV4YW1wbGU="
+    }
+  },
+  {
+    "fw": 5080, "lts": 30, "msm_id": 2000001, "prb_id": 1002, "timestamp": 1767225601,
+    "type": "dns", "af": 4, "from": "198.51.100.20",
+    "resultset": [
+      { "af": 4, "dst_addr": "192.0.2.53", "proto": "UDP", "error": { "timeout": 5000 } },
+      { "af": 4, "dst_addr": "192.0.2.53", "proto": "UDP",
+        "result": { "ANCOUNT": 1, "rt": 41.2, "size": 52,
+          "abuf": "BNKEAAABAAEAAAAACGhvc3RuYW1lBGJpbmQAABAAA8AMABAAAwAAAAAAEA9pc3QxLTAxLmV4YW1wbGU=" } }
+    ]
+  },
+  {
+    "fw": 5080, "msm_id": 2000001, "prb_id": 1003, "timestamp": 1767225602,
+    "type": "dns", "af": 4, "dst_addr": "192.0.2.53", "from": "192.0.2.200",
+    "error": { "timeout": 5000 }
+  },
+  {
+    "fw": 5080, "msm_id": 2000001, "prb_id": 1004, "timestamp": 1767225603,
+    "type": "dns", "af": 4, "dst_addr": "192.0.2.53", "from": "192.0.2.201",
+    "result": { "rt": 9.0, "abuf": "!!!not-base64!!!" }
+  }
+]

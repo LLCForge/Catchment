@@ -1,0 +1,28 @@
+# Catchment agent example configuration (`catchment agent --config agent.toml`).
+# The agent answers POST /v1/probe over mutual TLS. It only accepts clients
+# whose certificate is signed by `ca`, and it only probes `allowed_targets`,
+# whatever the controller asks for.
+
+[agent]
+listen = "0.0.0.0:8443"
+# CA that signs the controller's client certificate (use a dedicated CA).
+ca = "/etc/catchment/pki/ca.pem"
+# This agent's server certificate (chain) and private key.
+cert = "/etc/catchment/pki/agent.pem"
+key = "/etc/catchment/pki/agent-key.pem"
+# Local allowlist: requests for any other address are refused with 403.
+allowed_targets = ["192.0.2.0/24", "203.0.113.0/24", "2001:db8::/32"]
+# Raw-socket traceroute needs CAP_NET_RAW / root / Administrator.
+allow_traceroute = false
+# Reported with every observation.
+country = "NL"
+asn = 64500
+lat = 52.37
+lon = 4.89
+timeout = "2s"
+attempts = 3
+max_concurrent = 4
+
+[logging]
+format = "text"
+level = "info"

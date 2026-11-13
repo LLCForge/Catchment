@@ -1,0 +1,31 @@
+[
+  {
+    "fw": 5080, "msm_id": 2000002, "prb_id": 1001, "timestamp": 1767225700, "type": "traceroute",
+    "af": 4, "dst_addr": "192.0.2.53", "dst_name": "192.0.2.53", "from": "203.0.113.10",
+    "proto": "ICMP", "paris_id": 1, "size": 48,
+    "result": [
+      { "hop": 1, "result": [ { "from": "192.0.2.1", "rtt": 0.9, "size": 76, "ttl": 255 } ] },
+      { "hop": 2, "result": [ { "from": "198.51.100.1", "rtt": 9.8, "size": 76, "ttl": 254 },
+                              { "x": "*" } ] },
+      { "hop": 3, "result": [ { "from": "192.0.2.53", "rtt": 10.4, "size": 76, "ttl": 61 },
+                              { "from": "192.0.2.53", "rtt": 10.1, "size": 76, "ttl": 61 } ] }
+    ]
+  },
+  {
+    "fw": 5080, "msm_id": 2000002, "prb_id": 1002, "timestamp": 1767225701, "type": "traceroute",
+    "af": 4, "dst_addr": "192.0.2.53", "from": "198.51.100.20", "proto": "ICMP",
+    "result": [
+      { "hop": 1, "result": [ { "from": "203.0.113.77", "rtt": 30.0 } ] },
+      { "hop": 2, "result": [ { "from": "192.0.2.53", "rtt": 40.9 } ] }
+    ]
+  },
+  {
+    "fw": 5080, "msm_id": 2000002, "prb_id": 1003, "timestamp": 1767225702, "type": "traceroute",
+    "af": 4, "dst_addr": "192.0.2.53", "from": "192.0.2.200", "proto": "ICMP",
+    "result": [
+      { "hop": 1, "result": [ { "from": "192.0.2.1", "rtt": 1.1 } ] },
+      { "hop": 2, "result": [ { "from": "203.0.113.9", "rtt": 55.0 } ] },
+      { "hop": 255, "result": [ { "x": "*" }, { "x": "*" }, { "x": "*" } ] }
+    ]
+  }
+]

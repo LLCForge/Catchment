@@ -1,0 +1,174 @@
+# Catchment example configuration.
+# Addresses use documentation ranges and ASNs use private-use numbers:
+# replace them with your own before running.
+#
+# Two forms are accepted:
+#   * single service: [target] + [[pop]] (rounds stored directly in [storage] dir)
+#   * several services: [[service]] tables (rounds in <[storage] dir>/<name>/)
+# This example uses the multi-service form.
+
+# ---------------------------------------------------------------------------
+# Service 1: anycast DNS, dual-stack, identified by CHAOS TXT and NSID.
+[[service]]
+name = "dns"
+# Anycast prefix announced for this service; used to ask Pathology for path
+# changes when the catchment shifts. Default: the /24 (/48) around the address.
+prefix = "192.0.2.0/24"
+
+[service.target]
+address = "192.0.2.53"
+# Optional IPv6 address of the same service: measured from the same vantages,
+# reported per family plus a dual-stack comparison.
+address6 = "2001:db8::53"
+# CHAOS TXT name each PoP answers with its identity ("hostname.bind" or "id.server").
+qname = "hostname.bind"
+# Ask for the EDNS NSID option (RFC 5001) with every query.
+nsid = true
+# Also run an ICMP traceroute from every RIPE Atlas probe (enables last-hop rules).
+traceroute = true
+
+# PoP attribution. Server identity is tried first (CHAOS glob, then NSID glob,
+# then HTTP header glob) across all pops, then last_hop_asn, last_hop_prefix
+# and rdns. No match => "unattributed", never a guess.
+[[service.pop]]
+name = "fra1"
+match = { chaos = "fra1.*", nsid = "fra1-*" }
+
+[[service.pop]]
+name = "ist1"
+match = { chaos = "ist1.*", last_hop_asn = 64511 }
+
+[[service.pop]]
+name = "nyc1"
+match = { last_hop_prefix = "198.51.100.0/24", rdns = "\\.nyc1\\.example\\.net$" }
+
+# ---------------------------------------------------------------------------
+# Service 2: anycast HTTP(S), identified by a response header. HTTP
+# identification runs from the local vantage and from agents (RIPE Atlas does
+# not allow HTTP measurements from ordinary probes).
+[[service]]
+name = "cdn"
+
+[service.target]
+address = "203.0.113.80"
+http = { url = "https://www.example.net/", header = "x-served-by" }
+
+[[service.pop]]
+name = "ams1"
+match = { http = "*ams1*" }
+
+[[service.pop]]
+name = "lon1"
+match = { http = "*lon1*" }
+
+# ---------------------------------------------------------------------------
+# Probe from this machine (no API key needed).
+[vantage.local]
+enabled = true
+country = "TR"
+asn = 64510
+# Location for the HTML map.
+lat = 41.01
+lon = 28.97
+timeout = "2s"
+attempts = 3
+# Raw-socket traceroute from this machine: off | icmp | udp | tcp.
+# Needs CAP_NET_RAW (Linux), root (macOS) or Administrator (Windows);
+# without the privilege the CHAOS/NSID/HTTP result is kept and a warning logged.
+traceroute = "off"
+max_hops = 30
+# trace_port = 33434       # UDP base port (+1 per hop) or TCP port (default 443)
+
+# RIPE Atlas: one-off measurements with your own key and credits.
+[vantage.ripe_atlas]
+api_key_env = "RIPE_ATLAS_KEY"
+probes = { countries = ["DE", "TR", "US", "BR", "JP"], per_country = 10 }
+wait = "10m"
+poll = "30s"
+
+# Credit caps. Every round books its worst-case cost before creating
+# measurements (one-off DNS 20 credits/result, one-off traceroute 60) and is
+# skipped (with an `atlas_budget` alert) when a cap would be exceeded.
+[vantage.ripe_atlas.budget]
+daily_credits = 20000
+monthly_credits = 400000
+# min_balance = 50000      # also check GET /credits/ (key needs credit access)
+
+# Self-hosted agents (`catchment agent`), reached over mutual TLS.
+# [[vantage.agent]]
+# name = "ams"
+# url = "https://agent-ams.example.net:8443"
+# ca = "/etc/catchment/pki/ca.pem"            # CA of the agent's server certificate
+# cert = "/etc/catchment/pki/controller.pem"  # client certificate presented to agents
+# key = "/etc/catchment/pki/controller-key.pem"
+# timeout = "60s"
+# traceroute = "udp"                          # the agent must allow it too
+
+# Last-hop enrichment (RIPEstat ASN, reverse DNS): parallel and cached.
+[lookup]
+# Resolver for reverse DNS of last hops; required only by rdns rules.
+dns_resolver = "192.0.2.1:53"
+concurrency = 16
+cache_ttl = "6h"
+
+[schedule]
+interval = "15m"
+
+[storage]
+dir = "catchment-data"
+retain = 500
+
+# Alarms (sent through [alerts] sinks by `catchment run`).
+[alarms]
+shift = true
+shift_min_vantages = 2
+
+[alarms.latency]
+enabled = true
+baseline_rounds = 8
+min_vantages = 3
+ratio = 1.5
+min_increase_ms = 20
+
+# Optional: ask Pathology for BGP path changes of the service prefix when the
+# catchment shifts. Never delays alerts.
+# [pathology]
+# url = "http://127.0.0.1:8180"
+# token_env = "PATHOLOGY_TOKEN"
+# timeout = "5s"
+
+# Prometheus /metrics, /healthz and /readyz for `catchment run`
+# (use 0.0.0.0:9184 inside containers).
+[metrics]
+listen = "127.0.0.1:9184"
+
+[logging]
+format = "text"   # or "json"
+level = "info"
+
+# Alert delivery (llcforge-alert). Secrets are environment variable names.
+[alerts]
+dedup_window_secs = 300
+
+[[alerts.sink]]
+type = "stdout"
+format = "text"
+
+# [[alerts.sink]]
+# type = "telegram"
+# bot_token_env = "TELEGRAM_BOT_TOKEN"
+# chat_id = -1001234567890
+# resources = ["dns/*"]          # this chat only gets the dns service
+
+# [[alerts.sink]]
+# type = "webhook"
+# url = "https://hooks.example.net/catchment"
+# hmac_secret_env = "WEBHOOK_HMAC_SECRET"
+
+[silences]
+# Mounts /v1/silences on the metrics listener when set.
+# api_token_env = "CATCHMENT_ADMIN_TOKEN"
+
+[health]
+# Mounts POST /v1/reload on the metrics listener when set.
+# admin_token_env = "CATCHMENT_ADMIN_TOKEN"

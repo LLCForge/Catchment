@@ -1,0 +1,18 @@
+# winget default-locale manifest for Catchment. @VERSION@ is filled in by the release workflow.
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
+PackageIdentifier: LLCForge.Catchment
+PackageVersion: "@VERSION@"
+PackageLocale: en-US
+Publisher: LLCForge
+PublisherUrl: https://github.com/LLCForge
+PackageName: Catchment
+PackageUrl: https://github.com/LLCForge/Catchment
+License: MIT
+LicenseUrl: https://github.com/LLCForge/Catchment/blob/main/LICENSE
+ShortDescription: Anycast catchment prober: maps which PoP each vantage point lands in and detects shifts
+Tags:
+  - networking
+  - monitoring
+  - llcforge
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0

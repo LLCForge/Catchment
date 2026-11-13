@@ -1,0 +1,38 @@
+# Cargo.toml fragment for Catchment packaging. Paste both tables at the end of
+# the tool's Cargo.toml (sync.py does not edit Cargo.toml). The release
+# workflow runs `cargo deb --no-build --target <triple>` and
+# `cargo generate-rpm --target <triple>`; both rewrite target/release/ to
+# target/<triple>/release/ automatically.
+
+[package.metadata.deb]
+# Replace with the project's packaging contact before the first release.
+maintainer = "LLCForge contributors <https://github.com/LLCForge>"
+copyright = "2026, LLCForge contributors"
+license-file = ["LICENSE", "0"]
+extended-description = "Anycast catchment prober: maps which PoP each vantage point lands in and detects shifts"
+section = "net"
+priority = "optional"
+depends = "$auto"
+assets = [
+    ["target/release/catchment", "usr/bin/", "755"],
+    ["catchment.example.toml", "etc/catchment/catchment.toml", "644"],
+    ["README.md", "usr/share/doc/catchment/README.md", "644"],
+    ["NOTICE", "usr/share/doc/catchment/NOTICE", "644"],
+]
+conf-files = ["/etc/catchment/catchment.toml"]
+# Installs packaging/systemd/catchment.service and the matching maintainer scripts;
+# the unit is not enabled automatically (configure first, then enable).
+systemd-units = { unit-name = "catchment", unit-scripts = "packaging/systemd", enable = false, start = false }
+
+[package.metadata.generate-rpm]
+license = "MIT"
+summary = "Anycast catchment prober: maps which PoP each vantage point lands in and detects shifts"
+assets = [
+    { source = "target/release/catchment", dest = "/usr/bin/catchment", mode = "755" },
+    { source = "packaging/systemd/catchment.service", dest = "/usr/lib/systemd/system/catchment.service", mode = "644" },
+    { source = "catchment.example.toml", dest = "/etc/catchment/catchment.toml", mode = "644", config = "noreplace" },
+    { source = "README.md", dest = "/usr/share/doc/catchment/README.md", mode = "644", doc = true },
+    { source = "LICENSE", dest = "/usr/share/licenses/catchment/LICENSE", mode = "644", doc = true },
+]
+post_install_script = "systemctl daemon-reload >/dev/null 2>&1 || :"
+post_uninstall_script = "systemctl daemon-reload >/dev/null 2>&1 || :"

@@ -1,0 +1,74 @@
+[package]
+name = "catchment"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/LLCForge/Catchment"
+authors = ["LLCForge contributors"]
+description = "Anycast catchment prober: maps which PoP each vantage point lands in and detects shifts"
+readme = "README.md"
+keywords = ["anycast", "bgp", "ripe-atlas", "dns", "network"]
+categories = ["command-line-utilities", "network-programming"]
+rust-version = "1.85"
+
+[dependencies]
+anyhow = "1"
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "tokio", "query"] }
+base64 = "0.22"
+clap = { version = "4", features = ["derive"] }
+getrandom = "0.3"
+humantime = "2"
+ipnet = { version = "2", features = ["serde"] }
+llcforge-alert = { path = "crates/llcforge-alert", version = "0.1" }
+regex = "1"
+ring = "0.17"
+rustls = { version = "0.23", default-features = false, features = ["std", "ring", "tls12", "logging"] }
+rustls-pki-types = { version = "1", features = ["std"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+socket2 = { version = "0.6", features = ["all"] }
+thiserror = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "time", "signal", "io-util", "sync"] }
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12", "logging"] }
+toml = "0.8"
+tracing = "0.1"
+url = "2"
+
+[dev-dependencies]
+rcgen = "0.13"
+tower = { version = "0.5", features = ["util"] }
+
+[package.metadata.deb]
+maintainer = "LLCForge contributors <https://github.com/LLCForge>"
+copyright = "2026, LLCForge contributors"
+license-file = ["LICENSE", "0"]
+extended-description = "Anycast catchment prober: maps which PoP each vantage point lands in and detects shifts"
+section = "net"
+priority = "optional"
+depends = "$auto"
+assets = [
+    ["target/release/catchment", "usr/bin/", "755"],
+    ["catchment.example.toml", "etc/catchment/catchment.toml", "644"],
+    ["catchment-agent.example.toml", "usr/share/doc/catchment/catchment-agent.example.toml", "644"],
+    ["README.md", "usr/share/doc/catchment/README.md", "644"],
+    ["NOTICE", "usr/share/doc/catchment/NOTICE", "644"],
+]
+conf-files = ["/etc/catchment/catchment.toml"]
+# Installs packaging/systemd/catchment.service and the matching maintainer scripts;
+# the unit is not enabled automatically (configure first, then enable).
+systemd-units = { unit-name = "catchment", unit-scripts = "packaging/systemd", enable = false, start = false }
+
+[package.metadata.generate-rpm]
+license = "MIT"
+summary = "Anycast catchment prober: maps which PoP each vantage point lands in and detects shifts"
+assets = [
+    { source = "target/release/catchment", dest = "/usr/bin/catchment", mode = "755" },
+    { source = "packaging/systemd/catchment.service", dest = "/usr/lib/systemd/system/catchment.service", mode = "644" },
+    { source = "catchment.example.toml", dest = "/etc/catchment/catchment.toml", mode = "644", config = "noreplace" },
+    { source = "catchment-agent.example.toml", dest = "/usr/share/doc/catchment/catchment-agent.example.toml", mode = "644", doc = true },
+    { source = "README.md", dest = "/usr/share/doc/catchment/README.md", mode = "644", doc = true },
+    { source = "LICENSE", dest = "/usr/share/licenses/catchment/LICENSE", mode = "644", doc = true },
+]
+post_install_script = "systemctl daemon-reload >/dev/null 2>&1 || :"
+post_uninstall_script = "systemctl daemon-reload >/dev/null 2>&1 || :"
