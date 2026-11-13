@@ -38,7 +38,7 @@
         "allValue": ".*",
         "refresh": 2,
         "query": {
-          "query": "label_values(llcforge_alert_received_total{tool=\"catchment\"}, instance)",
+          "query": "label_values(llcforge_beacon_received_total{tool=\"catchment\"}, instance)",
           "refId": "instance"
         },
         "current": {}
@@ -161,7 +161,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(llcforge_alert_queue_depth{tool=\"catchment\",instance=~\"$instance\"})"
+          "expr": "sum(llcforge_beacon_queue_depth{tool=\"catchment\",instance=~\"$instance\"})"
         }
       ]
     },
@@ -200,7 +200,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(increase(llcforge_alert_received_total{tool=\"catchment\",instance=~\"$instance\"}[24h]))"
+          "expr": "sum(increase(llcforge_beacon_received_total{tool=\"catchment\",instance=~\"$instance\"}[24h]))"
         }
       ]
     },
@@ -239,7 +239,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(increase(llcforge_alert_dropped_total{tool=\"catchment\",instance=~\"$instance\"}[24h]))"
+          "expr": "sum(increase(llcforge_beacon_dropped_total{tool=\"catchment\",instance=~\"$instance\"}[24h]))"
         }
       ]
     },
@@ -292,7 +292,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(rate(llcforge_alert_received_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum(rate(llcforge_beacon_received_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "received"
         },
         {
@@ -301,7 +301,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(rate(llcforge_alert_deduplicated_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum(rate(llcforge_beacon_deduplicated_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "deduplicated"
         },
         {
@@ -310,7 +310,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(rate(llcforge_alert_silenced_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum(rate(llcforge_beacon_silenced_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "silenced"
         },
         {
@@ -319,7 +319,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(rate(llcforge_alert_dropped_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum(rate(llcforge_beacon_dropped_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "dropped"
         },
         {
@@ -328,7 +328,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(rate(llcforge_alert_invalid_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum(rate(llcforge_beacon_invalid_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "invalid"
         }
       ]
@@ -369,7 +369,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum by (instance) (llcforge_alert_queue_depth{tool=\"catchment\",instance=~\"$instance\"})",
+          "expr": "sum by (instance) (llcforge_beacon_queue_depth{tool=\"catchment\",instance=~\"$instance\"})",
           "legendFormat": "{{instance}}"
         }
       ]
@@ -423,7 +423,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum by (sink, type) (rate(llcforge_alert_sink_sent_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum by (sink, type) (rate(llcforge_beacon_sink_sent_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "{{sink}} ({{type}})"
         }
       ]
@@ -464,7 +464,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum by (sink, type) (rate(llcforge_alert_sink_failed_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum by (sink, type) (rate(llcforge_beacon_sink_failed_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "{{sink}} ({{type}})"
         }
       ]
@@ -505,7 +505,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum by (sink) (llcforge_alert_sink_queued{tool=\"catchment\",instance=~\"$instance\"})",
+          "expr": "sum by (sink) (llcforge_beacon_sink_queued{tool=\"catchment\",instance=~\"$instance\"})",
           "legendFormat": "{{sink}}"
         }
       ]
@@ -546,7 +546,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum by (sink) (rate(llcforge_alert_sink_retries_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum by (sink) (rate(llcforge_beacon_sink_retries_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "retries {{sink}}"
         },
         {
@@ -555,7 +555,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum by (sink) (rate(llcforge_alert_sink_rate_limited_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum by (sink) (rate(llcforge_beacon_sink_rate_limited_total{tool=\"catchment\",instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "rate-limited {{sink}}"
         }
       ]

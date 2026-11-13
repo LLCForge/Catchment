@@ -26,7 +26,7 @@ flowchart LR
   RA --> EN
   EN --> AT[Attributor]
   AT --> DF[Diff + latency baseline + store]
-  DF --> AL[Alarms] --> D[(llcforge-alert dispatcher)]
+  DF --> AL[Alarms] --> D[(llcforge-beacon dispatcher)]
   DF --> P[Pathology client] -. GET /v1/routes .-> PA[(Pathology)]
   DF --> E[Table / JSON / CSV / HTML map / compare / Prometheus]
 ```
@@ -52,7 +52,7 @@ flowchart LR
 | **Store** | `src/store.rs` | Atomic round files (`round-<ms>.json`), retention, recent rounds, lookup by experiment label. |
 | **Exporters** | `src/output.rs`, `src/map.js`, `src/metrics.rs` | Table, JSON, CSV, HTML report with the bundled map (`assets/map/`), compare table; Prometheus text format. |
 | **Pipeline** | `src/pipeline.rs` | One round of one service: collect (local, agents, Atlas in parallel), enrich, attribute, diff, alarms, correlate, persist. |
-| **Shared plumbing** | `crates/llcforge-alert` | Vendored suite crate: alert schema, sinks, queue, silences, health, reload, logging, service integration. |
+| **Shared plumbing** | `crates/llcforge-beacon` | Vendored suite crate: alert schema, sinks, queue, silences, health, reload, logging, service integration. |
 
 ## Trust boundaries
 
@@ -77,7 +77,7 @@ flowchart LR
 | PoP identifier missing | Falls back to last-hop rules; still-unknown results are `unattributed`. |
 | Previous rounds unreadable | Warning; shift detection and latency baseline skipped for that round. |
 | Pathology slow or down | Correlation reports the error after the timeout; alerts were already sent. |
-| Alert sink down | llcforge-alert keeps alerts in the persistent queue and redelivers. |
+| Alert sink down | llcforge-beacon keeps alerts in the persistent queue and redelivers. |
 | Invalid configuration on reload | Logged; the running configuration stays active. |
 | Round produces no observations | Round fails; counted in `catchment_rounds_total{outcome="failed"}`. |
 
@@ -94,7 +94,7 @@ Catchment/
 ├── .github/workflows/         CI (Linux, Windows, macOS), release, dependabot
 ├── assets/                    logos, icons, README visuals
 ├── assets/map/                bundled d3-array, d3-geo, topojson-client, world-atlas (ISC)
-├── crates/llcforge-alert/     vendored shared crate (sync.py)
+├── crates/llcforge-beacon/     vendored shared crate (sync.py)
 ├── deploy/                    Grafana dashboard, Prometheus rules, Helm chart
 ├── packaging/                 deb/rpm fragment, systemd, launchd, Windows service, Homebrew, scoop, winget
 ├── src/

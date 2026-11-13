@@ -27,8 +27,8 @@ use std::time::Duration;
 
 use anyhow::{bail, Context as _, Result};
 use clap::{Args, Parser, Subcommand, ValueEnum};
-use llcforge_alert::cli::{run_silence_command, ServiceCommand, SilenceCommand};
-use llcforge_alert::{
+use llcforge_beacon::cli::{run_silence_command, ServiceCommand, SilenceCommand};
+use llcforge_beacon::{
     health_router, init_logging, reload_router, run_service_command, silences_router, AlertHandle,
     ApiToken, Dispatcher, DispatcherOptions, LogFormat, Readiness, ReloadSignal, ServiceSpec,
     Shutdown, SilenceStore,
@@ -270,7 +270,7 @@ async fn one_shot(
     };
     tokio::select! {
         reports = work => emit(&reports?, out.format, out.html.as_deref()),
-        _ = llcforge_alert::service::shutdown_signal() => {
+        _ = llcforge_beacon::service::shutdown_signal() => {
             tracing::warn!("interrupted, round discarded");
             Ok(())
         }
@@ -396,7 +396,7 @@ fn daemon(config_path: PathBuf, mut shutdown: Shutdown, html: Option<PathBuf>) -
             let mut sd = shutdown.clone();
             tokio::spawn(async move {
                 if let Err(e) =
-                    llcforge_alert::serve(addr, admin, async move { sd.wait().await }).await
+                    llcforge_beacon::serve(addr, admin, async move { sd.wait().await }).await
                 {
                     tracing::error!(error = %e, "metrics/health listener stopped");
                 }
@@ -543,7 +543,7 @@ async fn run_agent(path: &Path) -> Result<()> {
     agent::serve(
         file.agent,
         listener,
-        llcforge_alert::service::shutdown_signal(),
+        llcforge_beacon::service::shutdown_signal(),
     )
     .await
 }
@@ -616,7 +616,7 @@ fn main() -> ExitCode {
     }
     let result = match cli.command {
         Command::Run { html } => {
-            llcforge_alert::service::run_foreground(cli.config, move |c, sd| daemon(c, sd, html))
+            llcforge_beacon::service::run_foreground(cli.config, move |c, sd| daemon(c, sd, html))
         }
         Command::Service { cmd } => {
             run_service_command(&SPEC, cmd.into_action(cli.config), |c, sd| {

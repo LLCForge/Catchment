@@ -146,7 +146,7 @@ listen = "127.0.0.1:9184"
 format = "text"   # or "json"
 level = "info"
 
-# Alert delivery (llcforge-alert). Secrets are environment variable names.
+# Alert delivery (llcforge-beacon). Secrets are environment variable names.
 [alerts]
 dedup_window_secs = 300
 

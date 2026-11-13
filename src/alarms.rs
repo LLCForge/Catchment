@@ -1,10 +1,10 @@
 //! Catchment shift and per-country latency regression alarms, delivered
-//! through llcforge-alert.
+//! through llcforge-beacon.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::net::IpAddr;
 
-use llcforge_alert::{Alert, Severity};
+use llcforge_beacon::{Alert, Severity};
 
 use crate::aggregate::{country_latency, median};
 use crate::config::LatencyAlarm;

@@ -76,7 +76,7 @@ pub fn parse_routes(body: &[u8], limit: usize) -> Result<Vec<PathEvent>> {
 impl PathologyClient {
     pub fn new(cfg: &PathologyConfig) -> Result<Self> {
         let token = match &cfg.token_env {
-            Some(var) => Some(llcforge_alert::env_secret(var)?),
+            Some(var) => Some(llcforge_beacon::env_secret(var)?),
             None => None,
         };
         let http = reqwest::Client::builder()

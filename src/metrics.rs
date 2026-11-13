@@ -1,5 +1,5 @@
 //! Prometheus text exposition for `catchment run` (served together with
-//! /healthz, /readyz and the llcforge-alert admin API).
+//! /healthz, /readyz and the llcforge-beacon admin API).
 
 use std::collections::BTreeMap;
 use std::fmt::Write;
@@ -29,7 +29,7 @@ pub struct ServiceMetrics {
 #[derive(Default)]
 pub struct Metrics {
     pub services: BTreeMap<String, ServiceMetrics>,
-    pub alerts: Option<Arc<llcforge_alert::Metrics>>,
+    pub alerts: Option<Arc<llcforge_beacon::Metrics>>,
     pub budget: Option<Arc<BudgetManager>>,
     pub cache: Option<SharedCache>,
 }

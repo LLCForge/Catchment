@@ -7,7 +7,7 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use anyhow::{bail, Result};
-use llcforge_alert::{Alert, AlertHandle, Severity};
+use llcforge_beacon::{Alert, AlertHandle, Severity};
 use tokio::task::JoinSet;
 
 use crate::agent::AgentClient;

@@ -6,7 +6,7 @@ use std::time::Duration;
 
 use anyhow::{bail, Context, Result};
 use ipnet::IpNet;
-use llcforge_alert::{AlertsConfig, HealthConfig, LogFormat, SilencesConfig};
+use llcforge_beacon::{AlertsConfig, HealthConfig, LogFormat, SilencesConfig};
 use serde::{Deserialize, Deserializer, Serialize};
 
 pub const DEFAULT_ATLAS_URL: &str = "https://atlas.ripe.net/api/v2";
@@ -624,7 +624,7 @@ impl Config {
             }
         }
         if let Some(level) = &self.logging.level {
-            llcforge_alert::logging::build_filter(level, None)
+            llcforge_beacon::logging::build_filter(level, None)
                 .map_err(|e| anyhow::anyhow!("[logging] {e}"))?;
         }
         Ok(())
